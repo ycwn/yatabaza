@@ -16,6 +16,7 @@
 #include "core/types.h"
 #include "core/console.h"
 #include "core/kernel.h"
+#include "core/service.h"
 
 
 
@@ -24,11 +25,18 @@ int main()
 
 	HAL_Init();
 
+	services_create();
+
 	printk("Yatabaza Core initialization complete\n");
+
+	services_start();
 
 	while (1)
 	{
 	}
+
+	services_stop();
+	services_destroy();
 
 }
 
