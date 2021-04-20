@@ -14,6 +14,7 @@
 #include "stm32f1xx_hal.h"
 
 #include "core/types.h"
+#include "core/console.h"
 #include "core/kernel.h"
 
 
@@ -22,6 +23,8 @@ int main()
 {
 
 	HAL_Init();
+
+	printk("Yatabaza Core initialization complete\n");
 
 	while (1)
 	{
