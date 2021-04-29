@@ -13,7 +13,7 @@
 #include "core/console.h"
 #include "core/service.h"
 
-#include "srv/bus.h"
+#include "system/bus.h"
 
 
 #define SDA_PIN        GPIO_PIN_7

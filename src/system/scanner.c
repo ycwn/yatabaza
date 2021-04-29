@@ -13,7 +13,7 @@
 #include "core/console.h"
 #include "core/service.h"
 
-#include "srv/bus.h"
+#include "system/bus.h"
 
 
 static int scanner_start();

@@ -1,7 +1,7 @@
 
 
-#ifndef __SRV_BUS_H
-#define __SRV_BUS_H
+#ifndef __SYSTEM_BUS_H
+#define __SYSTEM_BUS_H
 
 
 typedef u16 addr_t;
