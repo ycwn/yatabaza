@@ -119,7 +119,7 @@ int unlink(const char *path)
 int creat(const char *path, int mode)
 {
 
-	return open(path, 0, mode);
+	return open(path, O_CREAT | O_WRONLY | O_TRUNC, mode);
 
 }
 

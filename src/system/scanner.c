@@ -28,6 +28,7 @@ SERVICE(scanner,
 
 	SERVICE_DESCRIPTION("Synth I2C bus scan"),
 	SERVICE_DEPENDS(
+		SERVICE_DEP(bus),
 		SERVICE_DEP(syslog)
 	)
 );
