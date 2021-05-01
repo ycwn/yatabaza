@@ -57,6 +57,11 @@ static I2C_HandleTypeDef i2c_dev;
 
 
 
+/**
+ *
+ * Initialize the I2C bus
+ *
+ **/
 int bus_start()
 {
 
@@ -109,6 +114,11 @@ int bus_start()
 
 
 
+/**
+ *
+ * Disable the I2C bus
+ *
+ **/
 int bus_stop()
 {
 
@@ -119,6 +129,11 @@ int bus_stop()
 
 
 
+/**
+ *
+ * Reset all the devices on the I2C bus
+ *
+ **/
 void bus_reset()
 {
 
@@ -130,6 +145,11 @@ void bus_reset()
 
 
 
+/**
+ *
+ * Ping a I2C device given its address by reading a single byte
+ *
+ **/
 int bus_ping(addr_t addr)
 {
 
@@ -140,6 +160,13 @@ int bus_ping(addr_t addr)
 
 
 
+/**
+ *
+ * Scan the I2C bus, by pinging all the devices in the given range.
+ * The results are appended to an array, and the number of devices
+ * found is returned.
+ *
+ **/
 int bus_scan_list(addr_t *addrs, uint num, addr_t start, addr_t end)
 {
 
@@ -166,6 +193,11 @@ int bus_scan_list(addr_t *addrs, uint num, addr_t start, addr_t end)
 
 
 
+/**
+ *
+ * Read the specified number of bytes from an I2C device
+ *
+ **/
 int bus_read_buf(addr_t addr, void *buf, size_t num)
 {
 
@@ -175,6 +207,11 @@ int bus_read_buf(addr_t addr, void *buf, size_t num)
 
 
 
+/**
+ *
+ * Write the specified number of bytes to an I2C device
+ *
+ **/
 int bus_write_buf(addr_t addr, const void *buf, size_t num)
 {
 
@@ -184,6 +221,13 @@ int bus_write_buf(addr_t addr, const void *buf, size_t num)
 
 
 
+/**
+ *
+ * Read the specified number of bytes from a register of an I2C device.
+ * The register's address is first sent to the device as an 8-bit number,
+ * then a read operation is initiated.
+ *
+ **/
 int bus_read_r8_buf(addr_t addr, u8 reg, void *buf, size_t num)
 {
 
@@ -193,6 +237,13 @@ int bus_read_r8_buf(addr_t addr, u8 reg, void *buf, size_t num)
 
 
 
+/**
+ *
+ * Write the specified number of bytes to a register of an I2C device.
+ * The register's address is first sent to the device as an 8-bit number,
+ * then a write operation is initiated.
+ *
+ **/
 int bus_write_r8_buf(addr_t addr, u8 reg, const void *buf, size_t num)
 {
 
@@ -202,6 +253,13 @@ int bus_write_r8_buf(addr_t addr, u8 reg, const void *buf, size_t num)
 
 
 
+/**
+ *
+ * Read the specified number of bytes from a register of an I2C device.
+ * The register's address is first sent to the device as an 16-bit number,
+ * then a read operation is initiated.
+ *
+ **/
 int bus_read_r16_buf(addr_t addr, u16 reg, void *buf, size_t num)
 {
 
@@ -211,6 +269,13 @@ int bus_read_r16_buf(addr_t addr, u16 reg, void *buf, size_t num)
 
 
 
+/**
+ *
+ * Write the specified number of bytes to a register of an I2C device.
+ * The register's address is first sent to the device as an 16-bit number,
+ * then a write operation is initiated.
+ *
+ **/
 int bus_write_r16_buf(addr_t addr, u16 reg, const void *buf, size_t num)
 {
 
@@ -220,6 +285,11 @@ int bus_write_r16_buf(addr_t addr, u16 reg, const void *buf, size_t num)
 
 
 
+/**
+ *
+ * Translate a HAL error code to its POSIX equivalent.
+ *
+ **/
 int hal_error(int status)
 {
 

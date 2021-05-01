@@ -41,6 +41,11 @@ static int stop_r( const struct _service_vtable_t *srv);
 
 
 
+/**
+ *
+ * Pre-initialize all known services and daemons
+ *
+ **/
 void services_create()
 {
 
@@ -65,6 +70,11 @@ void services_create()
 
 
 
+/**
+ *
+ * Destroy all known services and daemons
+ *
+ **/
 void services_destroy()
 {
 
@@ -85,6 +95,12 @@ void services_destroy()
 
 
 
+/**
+ *
+ * Start all known services and daemons, one by one.
+ * A daemon's dependencies are also started, recursively.
+ *
+ **/
 void services_start()
 {
 
@@ -95,6 +111,11 @@ void services_start()
 
 
 
+/**
+ *
+ * Stop all known services and daemons, one by one.
+ *
+ **/
 void services_stop()
 {
 
@@ -105,6 +126,11 @@ void services_stop()
 
 
 
+/**
+ *
+ * Find a daemon's id, by its name
+ *
+ **/
 int service_find(const char *name)
 {
 
@@ -123,6 +149,12 @@ int service_find(const char *name)
 
 
 
+/**
+ *
+ * Start a daemon, given its id.
+ * The daemon's dependencies are also started, recursively.
+ *
+ **/
 int service_start(int srv)
 {
 
@@ -134,6 +166,12 @@ int service_start(int srv)
 
 
 
+/**
+ *
+ * Stop a daemon, given its id.
+ * Any daemon that depends upon it, is also stopped.
+ *
+ **/
 int service_stop(int srv)
 {
 
@@ -145,6 +183,11 @@ int service_stop(int srv)
 
 
 
+/**
+ *
+ * Query the status of a daemon
+ *
+ **/
 int service_get_status(int srv)
 {
 
@@ -156,6 +199,11 @@ int service_get_status(int srv)
 
 
 
+/**
+ *
+ * Return the name of a daemon, given its id
+ *
+ **/
 const char *service_get_name(int srv)
 {
 
@@ -167,6 +215,11 @@ const char *service_get_name(int srv)
 
 
 
+/**
+ *
+ * Return the description of a daemon, given its id
+ *
+ **/
 const char *service_get_description(int srv)
 {
 
@@ -178,6 +231,11 @@ const char *service_get_description(int srv)
 
 
 
+/**
+ *
+ * Default behaviors of daemons
+ *
+ **/
 int  service_def_create()  { return 0; }
 void service_def_destroy() { }
 int  service_def_start()   { return 0; }
@@ -185,6 +243,11 @@ int  service_def_stop()    { return 0; }
 
 
 
+/**
+ *
+ * Recursively start a daemon and its dependencies
+ *
+ **/
 int start_r(const struct _service_vtable_t *srv)
 {
 
@@ -232,6 +295,11 @@ done:
 
 
 
+/**
+ *
+ * Recursively stop a daemon and its dependants
+ *
+ **/
 int stop_r(const struct _service_vtable_t *srv)
 {
 

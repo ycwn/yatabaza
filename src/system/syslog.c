@@ -52,6 +52,13 @@ static union syslog_sink syslog_sink;
 
 
 
+/**
+ *
+ * Initialize the early console logger, that just
+ * buffers the messages on the loopback device, until
+ * the UART can be initialized.
+ *
+ **/
 int syslog_create()
 {
 
@@ -68,6 +75,13 @@ int syslog_create()
 
 
 
+/**
+ *
+ * Initialize the UART so that console messages can be logged.
+ * Dump all the messages stored in the loopback device and
+ * release it
+ *
+ **/
 int syslog_start()
 {
 
@@ -115,6 +129,11 @@ int syslog_start()
 
 
 
+/**
+ *
+ * Disable the logging daemon
+ *
+ **/
 int syslog_stop()
 {
 
@@ -125,6 +144,11 @@ int syslog_stop()
 
 
 
+/**
+ *
+ * System console handler. Sends incoming data to the UART.
+ *
+ **/
 void syslog_handler_uart(char ch)
 {
 
@@ -134,6 +158,11 @@ void syslog_handler_uart(char ch)
 
 
 
+/**
+ *
+ * Early console handler. Sends incoming data to the loopback device.
+ *
+ **/
 void syslog_handler_loop(char ch)
 {
 

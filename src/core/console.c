@@ -21,6 +21,11 @@ static console_handler_t handler = &handler_null;
 
 
 
+/**
+ *
+ * Return the current console handler.
+ *
+ **/
 console_handler_t console_get_handler()
 {
 
@@ -30,6 +35,12 @@ console_handler_t console_get_handler()
 
 
 
+/**
+ *
+ * Update the current console handler. The handler can be NULL,
+ * in which case system messages are discarded.
+ *
+ **/
 console_handler_t console_set_handler(console_handler_t h)
 {
 
@@ -47,6 +58,11 @@ console_handler_t console_set_handler(console_handler_t h)
 
 
 
+/**
+ *
+ * Print a formatted message to the system logs.
+ *
+ **/
 void printk(const char *fmt, ...)
 {
 
@@ -60,6 +76,11 @@ void printk(const char *fmt, ...)
 
 
 
+/**
+ *
+ * Print a message to the system logs.
+ *
+ **/
 void writek(const char *msg)
 {
 
@@ -72,6 +93,11 @@ void writek(const char *msg)
 
 
 
+/**
+ *
+ * Print a message to the system logs.
+ *
+ **/
 void writekn(const char *msg, size_t len)
 {
 
@@ -82,6 +108,12 @@ void writekn(const char *msg, size_t len)
 
 
 
+/**
+ *
+ * Internally called by printf() and co. Forwards the characters
+ * to the current console handler.
+ *
+ **/
 void _putchar(char ch)
 {
 
@@ -91,6 +123,11 @@ void _putchar(char ch)
 
 
 
+/**
+ *
+ * Null console handler, discards incoming messages
+ *
+ **/
 void handler_null(char ch)
 {
 }

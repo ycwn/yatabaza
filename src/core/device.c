@@ -39,6 +39,11 @@ static inline uint get_d(int fd) { return (fd >> (DEVICE_FD_BITS)) & ((1 << (DEV
 static const struct _device_vtable_t *get_dev_vtable(int fd);
 
 
+/**
+ *
+ * Default device behaviors
+ *
+ **/
 int device_def_stat(const char *path, struct stat *buf)    { return -ENOSYS; }
 int device_def_unlink(const char *path)                    { return -ENOSYS; }
 int device_def_open(const char *path, int flags, int mode) { return -ENOSYS; }
@@ -52,6 +57,11 @@ int device_def_ioctl(int fd, int request, void *arg)       { return -ENOSYS; }
 
 
 
+/**
+ *
+ * Return information about a file
+ *
+ **/
 int stat(const char *path, struct stat *buf)
 {
 
@@ -74,6 +84,11 @@ int stat(const char *path, struct stat *buf)
 
 
 
+/**
+ *
+ * Remove a file
+ *
+ **/
 int unlink(const char *path)
 {
 
@@ -96,6 +111,11 @@ int unlink(const char *path)
 
 
 
+/**
+ *
+ * Create a new file
+ *
+ **/
 int creat(const char *path, int mode)
 {
 
@@ -105,6 +125,11 @@ int creat(const char *path, int mode)
 
 
 
+/**
+ *
+ * Open an existing file, or create a new one
+ *
+ **/
 int open(const char *path, int flags, int mode)
 {
 
@@ -133,6 +158,11 @@ int open(const char *path, int flags, int mode)
 
 
 
+/**
+ *
+ * Close an open file
+ *
+ **/
 int close(int fd)
 {
 
@@ -155,6 +185,11 @@ int close(int fd)
 
 
 
+/**
+ *
+ * Read from a file
+ *
+ **/
 int read(int fd, void *buf, int len)
 {
 
@@ -177,6 +212,11 @@ int read(int fd, void *buf, int len)
 
 
 
+/**
+ *
+ * Write to a file
+ *
+ **/
 int write(int fd, const void *buf, int len)
 {
 
@@ -199,6 +239,11 @@ int write(int fd, const void *buf, int len)
 
 
 
+/**
+ *
+ * Return information about an open file
+ *
+ **/
 int fstat(int fd, struct stat *st)
 {
 
@@ -221,6 +266,11 @@ int fstat(int fd, struct stat *st)
 
 
 
+/**
+ *
+ * Reposition a files read or write pointer
+ *
+ **/
 int lseek(int fd, int ofs, int whence)
 {
 
@@ -243,6 +293,11 @@ int lseek(int fd, int ofs, int whence)
 
 
 
+/**
+ *
+ * Send a control command to a device
+ *
+ **/
 int ioctl(int fd, int request, void *arg)
 {
 
@@ -266,6 +321,11 @@ int ioctl(int fd, int request, void *arg)
 
 
 
+/**
+ *
+ * Find a device's vtable, given a file descriptor
+ *
+ **/
 const struct _device_vtable_t *get_dev_vtable(int fd)
 {
 

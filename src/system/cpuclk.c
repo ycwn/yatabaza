@@ -27,6 +27,11 @@ SERVICE(cpuclk,
 
 
 
+/**
+ *
+ * Initialize the CPU's clock, and enable various peripherals
+ *
+ **/
 int cpuclk_start()
 {
 

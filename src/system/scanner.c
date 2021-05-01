@@ -34,6 +34,11 @@ SERVICE(scanner,
 
 
 
+/**
+ *
+ * Scan the I2C bus and list all attached devices
+ *
+ **/
 int scanner_start()
 {
 
