@@ -1,7 +1,7 @@
 
 
-#ifndef __CORE_CONSOLE_H
-#define __CORE_CONSOLE_H
+#ifndef CORE_CONSOLE_H
+#define CORE_CONSOLE_H
 
 
 typedef void (*console_handler_t)(char ch);

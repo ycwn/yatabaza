@@ -1,7 +1,7 @@
 
 
-#ifndef __CORE_TYPES_H
-#define __CORE_TYPES_H
+#ifndef CORE_TYPES_H
+#define CORE_TYPES_H
 
 
 typedef unsigned int uint;

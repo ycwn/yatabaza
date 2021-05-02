@@ -1,7 +1,7 @@
 
 
-#ifndef __CORE_VT102_H
-#define __CORE_VT102_H
+#ifndef CORE_VT102_H
+#define CORE_VT102_H
 
 
 #define VT102_ESC  "\033"

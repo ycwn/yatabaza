@@ -1,7 +1,7 @@
 
 
-#ifndef __CORE_SERVICE_H
-#define __CORE_SERVICE_H
+#ifndef CORE_SERVICE_H
+#define CORE_SERVICE_H
 
 
 enum {

@@ -1,7 +1,7 @@
 
 
-#ifndef __CORE_DEVICE_H
-#define __CORE_DEVICE_H
+#ifndef CORE_DEVICE_H
+#define CORE_DEVICE_H
 
 
 enum {

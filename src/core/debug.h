@@ -1,7 +1,7 @@
 
 
-#ifndef __CORE_DEBUG_H
-#define __CORE_DEBUG_H
+#ifndef CORE_DEBUG_H
+#define CORE_DEBUG_H
 
 
 #undef checkpoint

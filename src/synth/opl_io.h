@@ -1,7 +1,7 @@
 
 
-#ifndef __SYNTH_OPL_IO_H
-#define __SYNTH_OPL_IO_H
+#ifndef SYNTH_OPL_IO_H
+#define SYNTH_OPL_IO_H
 
 
 enum {
