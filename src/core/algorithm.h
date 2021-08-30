@@ -389,15 +389,22 @@
 		ringbuf##_datatype data[ringbuf##_capacity];                                                               \
                                                                                                                            \
 	};                                                                                                                 \
-                                                                                                                           \
+															   \
+	ringbuf##_datatype ringbuf##_peek(struct ringbuf *rb);                                                             \
+	bool ringbuf##_pushv(struct ringbuf *rb, const ringbuf##_datatype *val);                                           \
+	bool ringbuf##_pushvv(struct ringbuf *rb, ringbuf##_datatype **elm);                                               \
+	bool ringbuf##_popv(struct ringbuf *rb, ringbuf##_datatype *val);                                                  \
+															   \
 	static inline void ringbuf##_clear(struct ringbuf *rb)    { rb->head = rb->tail = 0; }                             \
 	static inline uint ringbuf##_count(struct ringbuf *rb)    { return rb->tail - rb->head; }                          \
 	static inline bool ringbuf##_is_empty(struct ringbuf *rb) { return ringbuf##_count(rb) == 0; }                     \
 	static inline bool ringbuf##_is_full( struct ringbuf *rb) { return ringbuf##_count(rb) >= ringbuf##_capacity; }    \
+															   \
+	static inline bool ringbuf##_push(struct ringbuf *rb, const ringbuf##_datatype val) {                              \
+		return ringbuf##_pushv(rb, &val);                                                                          \
+	}                                                                                                                  \
                                                                                                                            \
-	ringbuf##_datatype ringbuf##_peek(struct ringbuf *rb);                                                             \
-	bool ringbuf##_push(struct ringbuf *rb, const ringbuf##_datatype val);                                             \
-	bool ringbuf##_pop(struct ringbuf *rb, ringbuf##_datatype *val);
+
 
 
 
@@ -407,8 +414,9 @@
  **/
 #define GENERATE_RINGBUF_EXT(ringbuf)                                                    \
 	extern ringbuf##_datatype ringbuf##_peek(struct ringbuf *rb);                    \
-	extern bool ringbuf##_push(struct ringbuf *rb, const ringbuf##_datatype val);    \
-	extern bool ringbuf##_pop(struct ringbuf *rb, ringbuf##_datatype *val);
+	extern bool ringbuf##_pushv(struct ringbuf *rb, const ringbuf##_datatype *val);  \
+	extern bool ringbuf##_pushvv(struct ringbuf *rb, ringbuf##_datatype **elm);      \
+	extern bool ringbuf##_popv(struct ringbuf *rb, ringbuf##_datatype *val);
 
 
 
@@ -422,9 +430,22 @@
 		return rb->data[(rb->head >= 0)? rb->head: rb->head + ringbuf##_capacity];    \
 	}                                                                                     \
                                                                                               \
-	bool ringbuf##_push(struct ringbuf *rb, const ringbuf##_datatype val) {               \
+	bool ringbuf##_pushv(struct ringbuf *rb, const ringbuf##_datatype *val) {             \
 		bool full = ringbuf##_is_full(rb);                                            \
-		rb->data[rb->tail++] = val;                                                   \
+		rb->data[rb->tail++] = *val;                                                  \
+		if (rb->tail >= ringbuf##_capacity) {                                         \
+			rb->tail -= ringbuf##_capacity;                                       \
+			rb->head -= ringbuf##_capacity;                                       \
+		}                                                                             \
+		if (!full)                                                                    \
+			return false;                                                         \
+		rb->head++;                                                                   \
+		return true;                                                                  \
+	}                                                                                     \
+											      \
+	bool ringbuf##_pushvv(struct ringbuf *rb, ringbuf##_datatype **elm) {                 \
+		bool full = ringbuf##_is_full(rb);                                            \
+		*elm = &rb->data[rb->tail++];                                                 \
 		if (rb->tail >= ringbuf##_capacity) {                                         \
 			rb->tail -= ringbuf##_capacity;                                       \
 			rb->head -= ringbuf##_capacity;                                       \
@@ -435,7 +456,7 @@
 		return true;                                                                  \
 	}                                                                                     \
                                                                                               \
-	bool ringbuf##_pop(struct ringbuf *rb, ringbuf##_datatype *val) {                     \
+	bool ringbuf##_popv(struct ringbuf *rb, ringbuf##_datatype *val) {                    \
 		if (ringbuf##_is_empty(rb)) return false;                                     \
 		*val = ringbuf##_peek(rb);                                                    \
 		rb->head++;                                                                   \

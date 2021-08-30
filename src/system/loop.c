@@ -132,7 +132,7 @@ int loopback_read(int fd, void *buf, int len)
 	int num;
 
 	for (num=0; num < len; num++)
-		if (!loopbuf_pop(&loopback, ptr++))
+		if (!loopbuf_popv(&loopback, ptr++))
 			break;
 
 	return num;

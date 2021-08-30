@@ -52,7 +52,7 @@ void services_create()
 	SERVICES_FOREACH(srv) {
 
 		if (*srv->status != SERVICE_STATE_INIT)
-					continue;
+			continue;
 
 		int ret = srv->create();
 

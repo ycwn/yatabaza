@@ -85,8 +85,8 @@ int syslog_create()
 int syslog_start()
 {
 
-	GPIO_InitTypeDef gpio_rx;
-	GPIO_InitTypeDef gpio_tx;
+	GPIO_InitTypeDef gpio_rx = { 0 };
+	GPIO_InitTypeDef gpio_tx = { 0 };
 
 	gpio_tx.Pin   = GPIO_PIN_9;
 	gpio_tx.Mode  = GPIO_MODE_AF_PP;
