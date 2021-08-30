@@ -11,12 +11,17 @@
 #include <sys/stat.h>
 #include <sys/unistd.h>
 
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+
 #include "stm32f1xx_hal.h"
 
 #include "core/types.h"
 #include "core/console.h"
 #include "core/kernel.h"
 #include "core/service.h"
+
 
 
 
@@ -55,6 +60,7 @@ void SysTick_Handler()
 {
 
 	HAL_IncTick();
+	xPortSysTickHandler();
 
 }
 
@@ -105,15 +111,6 @@ void UsageFault_Handler() //SIGILL
 
 
 
-void SVC_Handler() //???
-{
-
-	panic();
-
-}
-
-
-
 void DebugMon_Handler() //SIGTRAP
 {
 
@@ -123,10 +120,7 @@ void DebugMon_Handler() //SIGTRAP
 
 
 
-void PendSV_Handler()
+void vApplicationStackOverflowHook(TaskHandle_t task, char *name)
 {
-
-	panic();
-
 }
 
