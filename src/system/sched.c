@@ -28,7 +28,7 @@ SERVICE(sched,
 
 	SERVICE_DESCRIPTION("FreeRTOS scheduler"),
 	SERVICE_DEPENDS(
-		SERVICE_DEP(sched)
+		SERVICE_DEP(cpuclk)
 	)
 
 );
