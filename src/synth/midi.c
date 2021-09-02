@@ -197,8 +197,10 @@ int midi_drain_init(midi_drain *snk)
 	snk->aftertouch_mono = NULL;
 	snk->pitchbend       = NULL;
 
-	snk->sysex_data = NULL;
-	snk->sysex_end  = NULL;
+	snk->sysex_begin  = NULL;
+	snk->sysex_data   = NULL;
+	snk->sysex_end    = NULL;
+	snk->sysex_cancel = NULL;
 
 	snk->tcqf     = NULL;
 	snk->song_pos = NULL;
@@ -333,6 +335,25 @@ int midi_dispatch(const midi_event *evt)
 		if ((snk->channels & mask) == 0)
 			continue;
 
+		if (snk->status != MIDI_SYSTEM_SYSEX_DATA) {
+
+			if (evt->type == MIDI_SYSTEM_SYSEX_DATA)
+				MIDI_VCALL(sysex_begin, snk);
+
+		} else {
+
+			if (evt->type != MIDI_SYSTEM_SYSEX_DATA) {
+
+				if (evt->type == MIDI_SYSTEM_SYSEX_END)
+					MIDI_VCALL(sysex_end, snk);
+
+				else
+					MIDI_VCALL(sysex_cancel, snk);
+
+			}
+
+		}
+
 		if (count >= 0) { // If theres a valid raw event, update the drain's state
 
 			if (snk->status != evt->revent.status) {
@@ -405,10 +426,6 @@ int midi_dispatch(const midi_event *evt)
 
 			case MIDI_SYSTEM_TUNEREQ:
 				MIDI_VCALL(tunerq, snk);
-				break;
-
-			case MIDI_SYSTEM_SYSEX_END:
-				MIDI_VCALL(sysex_end, snk);
 				break;
 
 		}

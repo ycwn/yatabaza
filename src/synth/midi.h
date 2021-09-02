@@ -105,12 +105,15 @@ typedef void (*midi_fn_controller)(void *ptr, int channel, int control, int valu
 typedef void (*midi_fn_program)(void *ptr, int channel, int program);
 typedef void (*midi_fn_pitchbend)(void *ptr, int channel, int amount);
 
-typedef void (*midi_fn_system_sysex_data)(void *ptr, u8 data);
+typedef void (*midi_fn_sysex_begin)(void *ptr);
+typedef void (*midi_fn_sysex_data)(void *ptr, u8 data);
+typedef void (*midi_fn_sysex_end)(void *ptr);
+typedef void (*midi_fn_sysex_cancel)(void *ptr);
+
 typedef void (*midi_fn_system_tcqf)(void *ptr, uint code, uint value);
 typedef void (*midi_fn_system_songpos)(void *ptr, uint position);
 typedef void (*midi_fn_system_songsel)(void *ptr, uint number);
 typedef void (*midi_fn_system_tunerq)(void *ptr);
-typedef void (*midi_fn_system_sysex_end)(void *ptr);
 
 typedef int (*midi_fn_realtime)(uint source, uint event);
 
@@ -159,8 +162,10 @@ typedef struct midi_drain {
 	midi_fn_aftertouch_mono  aftertouch_mono;
 	midi_fn_pitchbend        pitchbend;
 
-	midi_fn_system_sysex_data  sysex_data;
-	midi_fn_system_sysex_end   sysex_end;
+	midi_fn_sysex_begin   sysex_begin;
+	midi_fn_sysex_data    sysex_data;
+	midi_fn_sysex_end     sysex_end;
+	midi_fn_sysex_cancel  sysex_cancel;
 
 	midi_fn_system_tcqf     tcqf;
 	midi_fn_system_songpos  song_pos;
