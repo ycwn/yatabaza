@@ -56,7 +56,6 @@ enum {
 struct midi_event;
 struct midi_source;
 struct midi_drain;
-struct midi_demux;
 
 typedef void (*midi_fn_start)(void *ptr);
 typedef void (*midi_fn_stop)(void *ptr);

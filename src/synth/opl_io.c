@@ -229,6 +229,7 @@ int opl_io_reset(uint dev)
 /**
  *
  * Set the lock bit on a device
+ *
  **/
 int opl_io_lock(uint dev)
 {
@@ -249,6 +250,7 @@ int opl_io_lock(uint dev)
 /**
  *
  * Clear the lock bit on a device
+ *
  **/
 int opl_io_unlock(uint dev)
 {
@@ -268,6 +270,7 @@ int opl_io_unlock(uint dev)
 /**
  *
  * Check the status of the lock bit of a device
+ *
  **/
 int opl_io_is_locked(uint dev)
 {
