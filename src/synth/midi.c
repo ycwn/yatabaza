@@ -40,6 +40,7 @@ static int event_length(uint status);
 static int event_decode(midi_event *evt, const midi_rawevent *rev);
 
 static inline bool is_midi_status(  uint c) { return (c & 0x80) != 0; }
+static inline bool is_midi_channel( uint c) { return (c & 0xF0) != 0xF0; }
 static inline bool is_midi_realtime(uint c) { return (c & 0xF8) == 0xF8; }
 static inline bool is_midi_system(  uint c) { return (c & 0xF8) == 0xF0; }
 
@@ -488,28 +489,35 @@ midi_fn_realtime midi_realtime_get_handler()
 int event_length(uint status)
 {
 
-	switch (status & 0xF0) {
+	if (is_midi_channel(status)) {
 
-		case MIDI_EVENT_NOTE_OFF:        return 2;
-		case MIDI_EVENT_NOTE_ON:         return 2;
-		case MIDI_EVENT_AFTERTOUCH_POLY: return 2;
-		case MIDI_EVENT_CONTROL_CHANGE:  return 2;
-		case MIDI_EVENT_PROGRAM_CHANGE:  return 1;
-		case MIDI_EVENT_AFTERTOUCH_MONO: return 1;
-		case MIDI_EVENT_PITCHBEND:       return 2;
+		switch (status & 0xF0) {
 
-	}
+			case MIDI_EVENT_NOTE_OFF:        return 2;
+			case MIDI_EVENT_NOTE_ON:         return 2;
+			case MIDI_EVENT_AFTERTOUCH_POLY: return 2;
+			case MIDI_EVENT_CONTROL_CHANGE:  return 2;
+			case MIDI_EVENT_PROGRAM_CHANGE:  return 1;
+			case MIDI_EVENT_AFTERTOUCH_MONO: return 1;
+			case MIDI_EVENT_PITCHBEND:       return 2;
 
-	switch (status) {
+		}
 
-		case MIDI_SYSTEM_SYSEX_DATA: return 1;
-		case MIDI_SYSTEM_TCQF:       return 1;
-		case MIDI_SYSTEM_SONGPOS:    return 2;
-		case MIDI_SYSTEM_SONGSEL:    return 1;
-		case MIDI_SYSTEM_TUNEREQ:    return 0;
-		case MIDI_SYSTEM_SYSEX_END:  return 0;
+	} else if (is_midi_system(status)) {
 
-	}
+		switch (status) {
+
+			case MIDI_SYSTEM_SYSEX_DATA: return 1;
+			case MIDI_SYSTEM_TCQF:       return 1;
+			case MIDI_SYSTEM_SONGPOS:    return 2;
+			case MIDI_SYSTEM_SONGSEL:    return 1;
+			case MIDI_SYSTEM_TUNEREQ:    return 0;
+			case MIDI_SYSTEM_SYSEX_END:  return 0;
+
+		}
+
+	} else if (is_midi_realtime(status))
+		return 0;
 
 	return -EINVAL;
 
@@ -526,73 +534,90 @@ int event_length(uint status)
 int event_decode(midi_event *evt, const midi_rawevent *rev)
 {
 
+	if (is_midi_channel(rev->status)) {
+
+		switch (rev->status & 0xF0) {
+
+			case MIDI_EVENT_NOTE_OFF:
+			case MIDI_EVENT_NOTE_ON:
+				evt->note.channel  = rev->status & 0x0F;
+				evt->note.key      = rev->data[0];
+				evt->note.velocity = rev->data[1];
+				break;
+
+			case MIDI_EVENT_AFTERTOUCH_POLY:
+				evt->type   = rev->status & 0xF0;
+				evt->aftertouch.channel  = rev->status & 0x0F;
+				evt->aftertouch.key      = rev->data[0];
+				evt->aftertouch.pressure = rev->data[1];
+				break;
+
+			case MIDI_EVENT_CONTROL_CHANGE:
+				evt->control.channel = rev->status & 0x0F;
+				evt->control.id      = rev->data[0];
+				evt->control.value   = rev->data[1];
+				break;
+
+			case MIDI_EVENT_PROGRAM_CHANGE:
+				evt->program.channel = rev->status & 0x0F;
+				evt->program.number  = rev->data[0];
+				break;
+
+			case MIDI_EVENT_AFTERTOUCH_MONO:
+				evt->aftertouch.channel  = rev->status & 0x0F;
+				evt->aftertouch.key      = -1;
+				evt->aftertouch.pressure = rev->data[0];
+				break;
+
+			case MIDI_EVENT_PITCHBEND:
+				evt->pitchbend.channel = rev->status & 0x0F;
+				evt->pitchbend.amount  = rev->data[0] + rev->data[1] * 128;
+				break;
+
+			default:
+				return -EINVAL;
+
+		}
+
+		evt->type = rev->status & 0xF0;
+
+	} else if (is_midi_system(rev->status)) {
+
+		switch (rev->status) {
+
+			case MIDI_SYSTEM_SYSEX_DATA:
+				evt->sysex.data = rev->data[0];
+				break;
+
+			case MIDI_SYSTEM_TCQF:
+				evt->tcqf.code  = (rev->data[0] & 0x70) >> 4;
+				evt->tcqf.value = (rev->data[0] & 0x0f) >> 0;
+				break;
+
+			case MIDI_SYSTEM_SONGPOS:
+				evt->song.position = 6 * (rev->data[0] + rev->data[1] * 128);
+				break;
+
+			case MIDI_SYSTEM_SONGSEL:
+				evt->song.number = rev->data[0];
+				break;
+
+			case MIDI_SYSTEM_TUNEREQ:
+			case MIDI_SYSTEM_SYSEX_END:
+				break;
+
+			default:
+				return -EINVAL;
+
+		}
+
+		evt->type = rev->status;
+
+	} else
+		return -EINVAL;
+
 	evt->source = rev->src_id;
-	evt->type   = rev->status & 0xF0;
 	evt->revent = *rev;
-
-	switch (evt->type) {
-
-		case MIDI_EVENT_NOTE_OFF:
-		case MIDI_EVENT_NOTE_ON:
-			evt->note.channel  = rev->status & 0x0F;
-			evt->note.key      = rev->data[0];
-			evt->note.velocity = rev->data[1];
-			break;
-
-		case MIDI_EVENT_AFTERTOUCH_POLY:
-			evt->aftertouch.channel  = rev->status & 0x0F;
-			evt->aftertouch.key      = rev->data[0];
-			evt->aftertouch.pressure = rev->data[1];
-			break;
-
-		case MIDI_EVENT_CONTROL_CHANGE:
-			evt->control.channel = rev->status & 0x0F;
-			evt->control.id      = rev->data[0];
-			evt->control.value   = rev->data[1];
-			break;
-
-		case MIDI_EVENT_PROGRAM_CHANGE:
-			evt->program.channel = rev->status & 0x0F;
-			evt->program.number  = rev->data[0];
-			break;
-
-		case MIDI_EVENT_AFTERTOUCH_MONO:
-			evt->aftertouch.channel  = rev->status & 0x0F;
-			evt->aftertouch.key      = -1;
-			evt->aftertouch.pressure = rev->data[0];
-			break;
-
-		case MIDI_EVENT_PITCHBEND:
-			evt->pitchbend.channel = rev->status & 0x0F;
-			evt->pitchbend.amount  = rev->data[0] + rev->data[1] * 128;
-			break;
-
-
-		case MIDI_SYSTEM_SYSEX_DATA:
-			evt->sysex.data = rev->data[0];
-			break;
-
-		case MIDI_SYSTEM_TCQF:
-			evt->tcqf.code  = (rev->data[0] & 0x70) >> 4;
-			evt->tcqf.value = (rev->data[0] & 0x0f) >> 0;
-			break;
-
-		case MIDI_SYSTEM_SONGPOS:
-			evt->song.position = 6 * (rev->data[0] + rev->data[1] * 128);
-			break;
-
-		case MIDI_SYSTEM_SONGSEL:
-			evt->song.number = rev->data[0];
-			break;
-
-		case MIDI_SYSTEM_TUNEREQ:
-		case MIDI_SYSTEM_SYSEX_END:
-			break;
-
-		default:
-			return -EINVAL;
-
-	}
 
 	return 0;
 
