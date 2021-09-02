@@ -53,6 +53,38 @@ enum {
 
 };
 
+enum {
+
+	MIDI_CH01 = 1 <<  0,
+	MIDI_CH02 = 1 <<  1,
+	MIDI_CH03 = 1 <<  2,
+	MIDI_CH04 = 1 <<  3,
+	MIDI_CH05 = 1 <<  4,
+	MIDI_CH06 = 1 <<  5,
+	MIDI_CH07 = 1 <<  6,
+	MIDI_CH08 = 1 <<  7,
+	MIDI_CH09 = 1 <<  8,
+	MIDI_CH10 = 1 <<  9,
+	MIDI_CH11 = 1 << 10,
+	MIDI_CH12 = 1 << 11,
+	MIDI_CH13 = 1 << 12,
+	MIDI_CH14 = 1 << 13,
+	MIDI_CH15 = 1 << 14,
+	MIDI_CH16 = 1 << 15,
+
+	MIDI_SYSTEM = 1 << 24,
+
+	MIDI_CH_ALL =
+		MIDI_CH01 | MIDI_CH02 | MIDI_CH03 | MIDI_CH04 |
+		MIDI_CH05 | MIDI_CH06 | MIDI_CH07 | MIDI_CH08 |
+		MIDI_CH09 | MIDI_CH10 | MIDI_CH11 | MIDI_CH12 |
+		MIDI_CH13 | MIDI_CH14 | MIDI_CH15 | MIDI_CH16,
+
+	MIDI_ALL = MIDI_CH_ALL | MIDI_SYSTEM
+
+};
+
+
 struct midi_event;
 struct midi_source;
 struct midi_drain;
@@ -107,7 +139,9 @@ typedef struct midi_source {
 typedef struct midi_drain {
 
 	list node;
+
 	uint status;
+	uint channels;
 
 	midi_fn_start  start;
 	midi_fn_stop   stop;

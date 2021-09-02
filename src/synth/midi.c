@@ -178,6 +178,9 @@ int midi_drain_init(midi_drain *snk)
 
 	list_init(&snk->node, snk);
 
+	snk->status   = MIDI_STATUS_INIT;
+	snk->channels = MIDI_ALL;
+
 	snk->start = NULL;
 	snk->stop  = NULL;
 
@@ -202,8 +205,7 @@ int midi_drain_init(midi_drain *snk)
 	snk->song_sel = NULL;
 	snk->tunerq   = NULL;
 
-	snk->status = MIDI_STATUS_INIT;
-	snk->ptr    = NULL;
+	snk->ptr = NULL;
 
 	return 0;
 
@@ -322,6 +324,14 @@ int midi_dispatch(const midi_event *evt)
 	for (list *node=list_begin(&drains); node != list_end(&drains); node=node->next) {
 
 		struct midi_drain *snk = LIST_PTR(midi_drain, node);
+
+		uint mask =
+			is_midi_channel(evt->revent.status)? 1 << (evt->revent.status & 0x0F):
+			is_midi_system(evt->revent.status)?  MIDI_SYSTEM:
+			0;
+
+		if ((snk->channels & mask) == 0)
+			continue;
 
 		if (count >= 0) { // If theres a valid raw event, update the drain's state
 
