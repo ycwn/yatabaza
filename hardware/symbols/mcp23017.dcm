@@ -1,8 +1,0 @@
-EESchema-DOCLIB  Version 2.0
-#
-$CMP MCP23017
-D 16Bit Bus Extender I2C
-K I2C BUS
-$ENDCMP
-#
-#End Doc Library
