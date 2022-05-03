@@ -1,6 +1,1 @@
-(sym_lib_table
-  (lib (name "mcp23017")(type "KiCad")(uri "${KIPRJMOD}/../symbols/mcp23017.kicad_sym")(options "")(descr ""))
-  (lib (name "stm32f103-bluepill")(type "KiCad")(uri "${KIPRJMOD}/../symbols/stm32f103-bluepill.kicad_sym")(options "")(descr ""))
-  (lib (name "ym3014b")(type "KiCad")(uri "${KIPRJMOD}/../symbols/ym3014b.kicad_sym")(options "")(descr ""))
-  (lib (name "ym3812")(type "KiCad")(uri "${KIPRJMOD}/../symbols/ym3812.kicad_sym")(options "")(descr ""))
-)
+../symbols/sym-lib-table
