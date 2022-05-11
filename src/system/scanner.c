@@ -10,6 +10,7 @@
 #include "stm32f1xx_hal.h"
 
 #include "core/types.h"
+#include "core/algorithm.h"
 #include "core/console.h"
 #include "core/service.h"
 
@@ -27,9 +28,10 @@ SERVICE(scanner,
 	SERVICE_START(scanner_start),
 
 	SERVICE_DESCRIPTION("Synth I2C bus scan"),
+
 	SERVICE_DEPENDS(
-		SERVICE_DEP(bus),
-		SERVICE_DEP(syslog)
+		bus,
+		syslog
 	)
 );
 

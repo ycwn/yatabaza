@@ -10,6 +10,7 @@
 #include "stm32f1xx_hal.h"
 
 #include "core/types.h"
+#include "core/algorithm.h"
 #include "core/console.h"
 #include "core/service.h"
 

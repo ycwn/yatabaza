@@ -8,6 +8,7 @@
 #include <errno.h>
 
 #include "core/types.h"
+#include "core/algorithm.h"
 #include "core/vt102.h"
 #include "core/console.h"
 #include "core/service.h"

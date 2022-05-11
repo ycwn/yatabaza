@@ -11,6 +11,7 @@
 
 #include "stm32f1xx_hal.h"
 
+#include "core/algorithm.h"
 #include "core/types.h"
 #include "core/console.h"
 #include "core/service.h"
@@ -35,7 +36,7 @@ SERVICE(syslog,
 	SERVICE_DESCRIPTION("System console"),
 
 	SERVICE_DEPENDS(
-		SERVICE_DEP(cpuclk)
+		cpuclk
 	)
 
 );

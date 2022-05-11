@@ -48,7 +48,7 @@ static inline bool is_midi_system(  uint c) { return (c & 0xF8) == 0xF0; }
 SERVICE(midi,
 
 	SERVICE_START(midi_start),
-	SERVICE_STOP(midi_stop),
+	SERVICE_STOP( midi_stop),
 
 	SERVICE_DESCRIPTION("MIDI Core")
 

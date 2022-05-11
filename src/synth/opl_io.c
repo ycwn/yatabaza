@@ -10,6 +10,7 @@
 #include "stm32f1xx_hal.h"
 
 #include "core/types.h"
+#include "core/algorithm.h"
 #include "core/console.h"
 #include "core/service.h"
 
@@ -88,12 +89,12 @@ SERVICE_DEF(bus);
 SERVICE(opl_io,
 
 	SERVICE_START(opl_io_start),
-	SERVICE_START(opl_io_stop),
+	SERVICE_STOP( opl_io_stop),
 
 	SERVICE_DESCRIPTION("OPL I/O core"),
 
 	SERVICE_DEPENDS(
-		SERVICE_DEP(bus)
+		bus
 	)
 
 );

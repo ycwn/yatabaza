@@ -10,6 +10,7 @@
 #include "stm32f1xx_hal.h"
 
 #include "core/types.h"
+#include "core/algorithm.h"
 #include "core/list.h"
 #include "core/console.h"
 #include "core/service.h"
@@ -23,8 +24,8 @@ static void midi_io_recv();
 static void midi_io_write(void *ptr, const u8 *buf, uint len);
 
 
-SERVICE_DEF(midi);
 SERVICE_DEF(cpuclk);
+SERVICE_DEF(midi);
 
 SERVICE(midi_io,
 
@@ -32,9 +33,10 @@ SERVICE(midi_io,
 	SERVICE_STOP( midi_io_stop),
 
 	SERVICE_DESCRIPTION("MIDI I/O interface"),
+
 	SERVICE_DEPENDS(
-		SERVICE_DEP(cpuclk),
-		SERVICE_DEP(midi)
+		cpuclk,
+		midi
 	)
 );
 

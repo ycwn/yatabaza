@@ -10,6 +10,7 @@
 #include "stm32f1xx_hal.h"
 
 #include "core/types.h"
+#include "core/algorithm.h"
 #include "core/console.h"
 #include "core/service.h"
 
@@ -48,8 +49,9 @@ SERVICE(bus,
 	SERVICE_STOP( bus_stop),
 
 	SERVICE_DESCRIPTION("Synth I2C bus"),
+
 	SERVICE_DEPENDS(
-		SERVICE_DEP(cpuclk)
+		cpuclk
 	)
 );
 

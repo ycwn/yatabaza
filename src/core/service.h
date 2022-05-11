@@ -79,17 +79,19 @@ extern int  service_def_stop();
 	const void *const __srv_##X##_vt_ptr = &__srv_##X##_vtbl
 
 
+#define SERVICE_DEPENDS_I(X)  &__srv_##X##_vtbl,
+
 #define SERVICE_CREATE(ct)  .create  = (service_create_t)(ct)
 #define SERVICE_DESTROY(dt) .destroy = (service_destroy_t)(dt)
 #define SERVICE_START(st)   .start   = (service_start_t)(st)
 #define SERVICE_STOP(sp)    .stop    = (service_stop_t)(sp)
 
 #define SERVICE_DESCRIPTION(desc) .description = (desc)
-#define SERVICE_DEPENDS(...)      .depends = { __VA_ARGS__, NULL }
-#define SERVICE_DEP(X)            &__srv_##X##_vtbl
+#define SERVICE_DEPENDS(...)      .depends = { PP_FOREACH(SERVICE_DEPENDS_I, __VA_ARGS__) NULL }
 
 #define SERVICE_DEF(X)  \
 	extern const struct _service_vtable_t __srv_##X##_vtbl
+
 
 #endif
 
