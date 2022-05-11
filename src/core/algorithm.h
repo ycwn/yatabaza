@@ -406,8 +406,6 @@
                                                                                                                            \
 
 
-
-
 /**
  * Generate the external prototypes for the ring buffer.
  *
@@ -472,6 +470,175 @@
 #define GENERATE_RINGBUF(ringbuf, datatype, capacity) \
 	GENERATE_RINGBUF_DEF(ringbuf, datatype, capacity) \
 	GENERATE_RINGBUF_SRC(ringbuf)
+
+
+
+/**
+ *  Expand the parameter and convert to string
+ *
+ **/
+#define PP_STRINGIFY_II(X)  #X
+#define PP_STRINGIFY_I(X)   PP_STRINGIFY_II(X)
+#define PP_STRINGIFY(X)     PP_STRINGIFY_I(X)
+
+
+
+/**
+ * Expand and concatenate the parameters
+ *
+ **/
+#define PP_CONCAT_II(x, y)  x##y
+#define PP_CONCAT_I(x, y)   PP_CONCAT_II(x, y)
+#define PP_CONCAT(x, y)     PP_CONCAT_I(x, y)
+
+
+
+/**
+ *  Count the arguments given to the variadic macro (up to 99)
+ *
+ **/
+#define PP_NARG_I( \
+	_00, _01, _02, _03, _04, _05, _06, _07, _08, _09,  \
+	_10, _11, _12, _13, _14, _15, _16, _17, _18, _19,  \
+	_20, _21, _22, _23, _24, _25, _26, _27, _28, _29,  \
+	_30, _31, _32, _33, _34, _35, _36, _37, _38, _39,  \
+	_40, _41, _42, _43, _44, _45, _46, _47, _48, _49,  \
+	_50, _51, _52, _53, _54, _55, _56, _57, _58, _59,  \
+	_60, _61, _62, _63, _64, _65, _66, _67, _68, _69,  \
+	_70, _71, _72, _73, _74, _75, _76, _77, _78, _79,  \
+	_80, _81, _82, _83, _84, _85, _86, _87, _88, _89,  \
+	_90, _91, _92, _93, _94, _95, _96, _97, _98, _99,  \
+	N, ...)  N
+
+#define PP_NARG(...)  PP_NARG_I(,##__VA_ARGS__,  \
+	99, 98, 97, 96, 95, 94, 93, 92, 91, 90,  \
+	89, 88, 87, 86, 85, 84, 83, 82, 81, 80,  \
+	79, 78, 77, 76, 75, 74, 73, 72, 71, 70,  \
+	69, 68, 67, 66, 65, 64, 63, 62, 61, 60,  \
+	59, 58, 57, 56, 55, 54, 53, 52, 51, 50,  \
+	49, 48, 47, 46, 45, 44, 43, 42, 41, 40,  \
+	39, 38, 37, 36, 35, 34, 33, 32, 31, 30,  \
+	29, 28, 27, 26, 25, 24, 23, 22, 21, 20,  \
+	19, 18, 17, 16, 15, 14, 13, 12, 11, 10,  \
+	 9,  8,  7,  6,  5,  4,  3,  2,  1,  0)
+
+
+
+/**
+ *  Generate an overloaded call to X, by appending the number
+ *  of arguments to the name.
+ *
+ **/
+#define PP_OVERLOAD(X, ...) PP_CONCAT(X, PP_NARG(__VA_ARGS__))
+
+
+
+/**
+ *  Apply X to each argument
+ *
+ **/
+#define PP_FOREACH_I_0(X, ...)
+#define PP_FOREACH_I_1(X, x, ...)   X(x) PP_FOREACH_I_0(X, __VA_ARGS__)
+#define PP_FOREACH_I_2(X, x, ...)   X(x) PP_FOREACH_I_1(X, __VA_ARGS__)
+#define PP_FOREACH_I_3(X, x, ...)   X(x) PP_FOREACH_I_2(X, __VA_ARGS__)
+#define PP_FOREACH_I_4(X, x, ...)   X(x) PP_FOREACH_I_3(X, __VA_ARGS__)
+#define PP_FOREACH_I_5(X, x, ...)   X(x) PP_FOREACH_I_4(X, __VA_ARGS__)
+#define PP_FOREACH_I_6(X, x, ...)   X(x) PP_FOREACH_I_5(X, __VA_ARGS__)
+#define PP_FOREACH_I_7(X, x, ...)   X(x) PP_FOREACH_I_6(X, __VA_ARGS__)
+#define PP_FOREACH_I_8(X, x, ...)   X(x) PP_FOREACH_I_7(X, __VA_ARGS__)
+#define PP_FOREACH_I_9(X, x, ...)   X(x) PP_FOREACH_I_8(X, __VA_ARGS__)
+#define PP_FOREACH_I_10(X, x, ...)  X(x) PP_FOREACH_I_9(X, __VA_ARGS__)
+#define PP_FOREACH_I_11(X, x, ...)  X(x) PP_FOREACH_I_10(X, __VA_ARGS__)
+#define PP_FOREACH_I_12(X, x, ...)  X(x) PP_FOREACH_I_11(X, __VA_ARGS__)
+#define PP_FOREACH_I_13(X, x, ...)  X(x) PP_FOREACH_I_12(X, __VA_ARGS__)
+#define PP_FOREACH_I_14(X, x, ...)  X(x) PP_FOREACH_I_13(X, __VA_ARGS__)
+#define PP_FOREACH_I_15(X, x, ...)  X(x) PP_FOREACH_I_14(X, __VA_ARGS__)
+#define PP_FOREACH_I_16(X, x, ...)  X(x) PP_FOREACH_I_15(X, __VA_ARGS__)
+#define PP_FOREACH_I_17(X, x, ...)  X(x) PP_FOREACH_I_16(X, __VA_ARGS__)
+#define PP_FOREACH_I_18(X, x, ...)  X(x) PP_FOREACH_I_17(X, __VA_ARGS__)
+#define PP_FOREACH_I_19(X, x, ...)  X(x) PP_FOREACH_I_18(X, __VA_ARGS__)
+#define PP_FOREACH_I_20(X, x, ...)  X(x) PP_FOREACH_I_19(X, __VA_ARGS__)
+#define PP_FOREACH_I_21(X, x, ...)  X(x) PP_FOREACH_I_20(X, __VA_ARGS__)
+#define PP_FOREACH_I_22(X, x, ...)  X(x) PP_FOREACH_I_21(X, __VA_ARGS__)
+#define PP_FOREACH_I_23(X, x, ...)  X(x) PP_FOREACH_I_22(X, __VA_ARGS__)
+#define PP_FOREACH_I_24(X, x, ...)  X(x) PP_FOREACH_I_23(X, __VA_ARGS__)
+#define PP_FOREACH_I_25(X, x, ...)  X(x) PP_FOREACH_I_24(X, __VA_ARGS__)
+#define PP_FOREACH_I_26(X, x, ...)  X(x) PP_FOREACH_I_25(X, __VA_ARGS__)
+#define PP_FOREACH_I_27(X, x, ...)  X(x) PP_FOREACH_I_26(X, __VA_ARGS__)
+#define PP_FOREACH_I_28(X, x, ...)  X(x) PP_FOREACH_I_27(X, __VA_ARGS__)
+#define PP_FOREACH_I_29(X, x, ...)  X(x) PP_FOREACH_I_28(X, __VA_ARGS__)
+#define PP_FOREACH_I_30(X, x, ...)  X(x) PP_FOREACH_I_29(X, __VA_ARGS__)
+#define PP_FOREACH_I_31(X, x, ...)  X(x) PP_FOREACH_I_30(X, __VA_ARGS__)
+#define PP_FOREACH_I_32(X, x, ...)  X(x) PP_FOREACH_I_31(X, __VA_ARGS__)
+#define PP_FOREACH_I_33(X, x, ...)  X(x) PP_FOREACH_I_32(X, __VA_ARGS__)
+#define PP_FOREACH_I_34(X, x, ...)  X(x) PP_FOREACH_I_33(X, __VA_ARGS__)
+#define PP_FOREACH_I_35(X, x, ...)  X(x) PP_FOREACH_I_34(X, __VA_ARGS__)
+#define PP_FOREACH_I_36(X, x, ...)  X(x) PP_FOREACH_I_35(X, __VA_ARGS__)
+#define PP_FOREACH_I_37(X, x, ...)  X(x) PP_FOREACH_I_36(X, __VA_ARGS__)
+#define PP_FOREACH_I_38(X, x, ...)  X(x) PP_FOREACH_I_37(X, __VA_ARGS__)
+#define PP_FOREACH_I_39(X, x, ...)  X(x) PP_FOREACH_I_38(X, __VA_ARGS__)
+#define PP_FOREACH_I_40(X, x, ...)  X(x) PP_FOREACH_I_39(X, __VA_ARGS__)
+#define PP_FOREACH_I_41(X, x, ...)  X(x) PP_FOREACH_I_40(X, __VA_ARGS__)
+#define PP_FOREACH_I_42(X, x, ...)  X(x) PP_FOREACH_I_41(X, __VA_ARGS__)
+#define PP_FOREACH_I_43(X, x, ...)  X(x) PP_FOREACH_I_42(X, __VA_ARGS__)
+#define PP_FOREACH_I_44(X, x, ...)  X(x) PP_FOREACH_I_43(X, __VA_ARGS__)
+#define PP_FOREACH_I_45(X, x, ...)  X(x) PP_FOREACH_I_44(X, __VA_ARGS__)
+#define PP_FOREACH_I_46(X, x, ...)  X(x) PP_FOREACH_I_45(X, __VA_ARGS__)
+#define PP_FOREACH_I_47(X, x, ...)  X(x) PP_FOREACH_I_46(X, __VA_ARGS__)
+#define PP_FOREACH_I_48(X, x, ...)  X(x) PP_FOREACH_I_47(X, __VA_ARGS__)
+#define PP_FOREACH_I_49(X, x, ...)  X(x) PP_FOREACH_I_48(X, __VA_ARGS__)
+#define PP_FOREACH_I_50(X, x, ...)  X(x) PP_FOREACH_I_49(X, __VA_ARGS__)
+#define PP_FOREACH_I_51(X, x, ...)  X(x) PP_FOREACH_I_50(X, __VA_ARGS__)
+#define PP_FOREACH_I_52(X, x, ...)  X(x) PP_FOREACH_I_51(X, __VA_ARGS__)
+#define PP_FOREACH_I_53(X, x, ...)  X(x) PP_FOREACH_I_52(X, __VA_ARGS__)
+#define PP_FOREACH_I_54(X, x, ...)  X(x) PP_FOREACH_I_53(X, __VA_ARGS__)
+#define PP_FOREACH_I_55(X, x, ...)  X(x) PP_FOREACH_I_54(X, __VA_ARGS__)
+#define PP_FOREACH_I_56(X, x, ...)  X(x) PP_FOREACH_I_55(X, __VA_ARGS__)
+#define PP_FOREACH_I_57(X, x, ...)  X(x) PP_FOREACH_I_56(X, __VA_ARGS__)
+#define PP_FOREACH_I_58(X, x, ...)  X(x) PP_FOREACH_I_57(X, __VA_ARGS__)
+#define PP_FOREACH_I_59(X, x, ...)  X(x) PP_FOREACH_I_58(X, __VA_ARGS__)
+#define PP_FOREACH_I_60(X, x, ...)  X(x) PP_FOREACH_I_59(X, __VA_ARGS__)
+#define PP_FOREACH_I_61(X, x, ...)  X(x) PP_FOREACH_I_60(X, __VA_ARGS__)
+#define PP_FOREACH_I_62(X, x, ...)  X(x) PP_FOREACH_I_61(X, __VA_ARGS__)
+#define PP_FOREACH_I_63(X, x, ...)  X(x) PP_FOREACH_I_62(X, __VA_ARGS__)
+#define PP_FOREACH_I_64(X, x, ...)  X(x) PP_FOREACH_I_63(X, __VA_ARGS__)
+#define PP_FOREACH_I_65(X, x, ...)  X(x) PP_FOREACH_I_64(X, __VA_ARGS__)
+#define PP_FOREACH_I_66(X, x, ...)  X(x) PP_FOREACH_I_65(X, __VA_ARGS__)
+#define PP_FOREACH_I_67(X, x, ...)  X(x) PP_FOREACH_I_66(X, __VA_ARGS__)
+#define PP_FOREACH_I_68(X, x, ...)  X(x) PP_FOREACH_I_67(X, __VA_ARGS__)
+#define PP_FOREACH_I_69(X, x, ...)  X(x) PP_FOREACH_I_68(X, __VA_ARGS__)
+#define PP_FOREACH_I_70(X, x, ...)  X(x) PP_FOREACH_I_69(X, __VA_ARGS__)
+#define PP_FOREACH_I_71(X, x, ...)  X(x) PP_FOREACH_I_70(X, __VA_ARGS__)
+#define PP_FOREACH_I_72(X, x, ...)  X(x) PP_FOREACH_I_71(X, __VA_ARGS__)
+#define PP_FOREACH_I_73(X, x, ...)  X(x) PP_FOREACH_I_72(X, __VA_ARGS__)
+#define PP_FOREACH_I_74(X, x, ...)  X(x) PP_FOREACH_I_73(X, __VA_ARGS__)
+#define PP_FOREACH_I_75(X, x, ...)  X(x) PP_FOREACH_I_74(X, __VA_ARGS__)
+#define PP_FOREACH_I_76(X, x, ...)  X(x) PP_FOREACH_I_75(X, __VA_ARGS__)
+#define PP_FOREACH_I_77(X, x, ...)  X(x) PP_FOREACH_I_76(X, __VA_ARGS__)
+#define PP_FOREACH_I_78(X, x, ...)  X(x) PP_FOREACH_I_77(X, __VA_ARGS__)
+#define PP_FOREACH_I_79(X, x, ...)  X(x) PP_FOREACH_I_78(X, __VA_ARGS__)
+#define PP_FOREACH_I_80(X, x, ...)  X(x) PP_FOREACH_I_79(X, __VA_ARGS__)
+#define PP_FOREACH_I_81(X, x, ...)  X(x) PP_FOREACH_I_80(X, __VA_ARGS__)
+#define PP_FOREACH_I_82(X, x, ...)  X(x) PP_FOREACH_I_81(X, __VA_ARGS__)
+#define PP_FOREACH_I_83(X, x, ...)  X(x) PP_FOREACH_I_82(X, __VA_ARGS__)
+#define PP_FOREACH_I_84(X, x, ...)  X(x) PP_FOREACH_I_83(X, __VA_ARGS__)
+#define PP_FOREACH_I_85(X, x, ...)  X(x) PP_FOREACH_I_84(X, __VA_ARGS__)
+#define PP_FOREACH_I_86(X, x, ...)  X(x) PP_FOREACH_I_85(X, __VA_ARGS__)
+#define PP_FOREACH_I_87(X, x, ...)  X(x) PP_FOREACH_I_86(X, __VA_ARGS__)
+#define PP_FOREACH_I_88(X, x, ...)  X(x) PP_FOREACH_I_87(X, __VA_ARGS__)
+#define PP_FOREACH_I_89(X, x, ...)  X(x) PP_FOREACH_I_88(X, __VA_ARGS__)
+#define PP_FOREACH_I_90(X, x, ...)  X(x) PP_FOREACH_I_89(X, __VA_ARGS__)
+#define PP_FOREACH_I_91(X, x, ...)  X(x) PP_FOREACH_I_90(X, __VA_ARGS__)
+#define PP_FOREACH_I_92(X, x, ...)  X(x) PP_FOREACH_I_91(X, __VA_ARGS__)
+#define PP_FOREACH_I_93(X, x, ...)  X(x) PP_FOREACH_I_92(X, __VA_ARGS__)
+#define PP_FOREACH_I_94(X, x, ...)  X(x) PP_FOREACH_I_93(X, __VA_ARGS__)
+#define PP_FOREACH_I_95(X, x, ...)  X(x) PP_FOREACH_I_94(X, __VA_ARGS__)
+#define PP_FOREACH_I_96(X, x, ...)  X(x) PP_FOREACH_I_95(X, __VA_ARGS__)
+#define PP_FOREACH_I_97(X, x, ...)  X(x) PP_FOREACH_I_96(X, __VA_ARGS__)
+#define PP_FOREACH_I_98(X, x, ...)  X(x) PP_FOREACH_I_97(X, __VA_ARGS__)
+#define PP_FOREACH_I_99(X, x, ...)  X(x) PP_FOREACH_I_98(X, __VA_ARGS__)
+
+#define PP_FOREACH(X, ...)  PP_OVERLOAD(PP_FOREACH_I_, __VA_ARGS__)(X, __VA_ARGS__)
 
 
 
