@@ -23,11 +23,8 @@
 
 
 
-
-int main()
+void init(void *args)
 {
-
-	HAL_Init();
 
 	services_create();
 
@@ -35,12 +32,30 @@ int main()
 
 	services_start();
 
-	while (1)
-	{
+	while (1) {
 	}
 
-	services_stop();
-	services_destroy();
+	reboot(RB_HALT_SYSTEM);
+
+}
+
+
+
+void main()
+{
+
+	HAL_Init();
+	
+	xTaskCreate(
+		&init,
+		"init",
+		256,
+		NULL,
+		tskIDLE_PRIORITY,
+		NULL
+	);
+
+	vTaskStartScheduler();
 
 }
 
@@ -49,17 +64,74 @@ int main()
 void panic()
 {
 
+	vTaskSuspendAll();
 	while (1);
 
 }
 
 
 
-void SysTick_Handler()
+int reboot(int cmd)
+{
+
+	if (cmd != RB_HALT_SYSTEM && cmd != RB_POWER_OFF && cmd != RB_AUTOBOOT)
+		return -EINVAL;
+
+	services_stop();
+	services_destroy();
+
+	vTaskSuspendAll();
+
+	switch (cmd) {
+
+		case RB_HALT_SYSTEM:
+			printk("System halted.\n");
+			break;
+
+		case RB_POWER_OFF:
+			printk("Power down.\n");
+			// Write GPIO to power down here.
+			break;
+
+		case RB_AUTOBOOT:
+			printk("Restarting system.\n");
+			NVIC_SystemReset();
+			break;
+
+	}
+
+	panic();
+
+}
+
+
+
+/**
+ *
+ *  Override the HAL_Delay() function that used by the
+ * lower levels of the HAL, so that it takes into
+ * acount FreeRTOS's task management
+ *
+ **/
+void HAL_Delay(uint32_t msec)
+{
+
+	vTaskDelay(msec);
+
+}
+
+
+
+/**
+ *
+ * Call HAL_IncTick() from FreeRTOS's tick hook,
+ * so that HAL keeps its timer updated.
+ *
+ **/
+void vApplicationTickHook()
 {
 
 	HAL_IncTick();
-	xPortSysTickHandler();
 
 }
 
@@ -74,7 +146,7 @@ void NMI_Handler()
 
 
 
-void HardFault_Handler() //ABRT
+void HardFault_Handler() //SIGABRT
 {
 
 	panic();
@@ -83,7 +155,7 @@ void HardFault_Handler() //ABRT
 
 
 
-void MemManage_Handler() //SEGV
+void MemManage_Handler() //SIGSEGV
 {
 
 	panic();

@@ -4,18 +4,15 @@
 #define CORE_KERNEL_H
 
 
+enum {
+	RB_HALT_SYSTEM = 0xcdef0123,
+	RB_POWER_OFF   = 0x4321fedc,
+	RB_AUTOBOOT    = 0x1234567
+};
+
+
+int  reboot(int cmd);
 void panic() __attribute__((noreturn));
 
 
-#define CRITICAL_SECTION(...)                                         \
-	do {                                                          \
-		UBaseType_t irq_mask = taskENTER_CRITICAL_FROM_ISR(); \
-		do {                                                  \
-			__VA_ARGS__                                   \
-		} while (0);                                          \
-		taskEXIT_CRITICAL_FROM_ISR(irq_mask);                 \
-	} while (0)
-
-
 #endif
-
